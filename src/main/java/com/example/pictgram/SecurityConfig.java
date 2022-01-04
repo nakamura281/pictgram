@@ -20,33 +20,33 @@ import com.example.pictgram.repository.UserRepository;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    protected static Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+	protected static Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
-    @Autowired
-    private UserRepository repository;
+	@Autowired
+	private UserRepository repository;
 
-    @Autowired
-    UserDetailsService service;
+	@Autowired
+	UserDetailsService service;
 
-    @Autowired
-    private FormAuthenticationProvider authenticationProvider;
+	@Autowired
+	private FormAuthenticationProvider authenticationProvider;
 
-    private static final String[] URLS = { "/css/**", "/images/**", "/scripts/**", "/h2-console/**" };
+	private static final String[] URLS = { "/css/**", "/images/**", "/scripts/**", "/h2-console/**", "/favicon.ico" };
 
-    /**
-    * 認証から除外する
-    */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(URLS);
-    }
+	/**
+	 * 認証から除外する
+	 */
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers(URLS);
+	}
 
-    /**
-    * 認証を設定する
-    */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
+	/**
+	 * 認証を設定する
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
         http.authorizeRequests().antMatchers("/login", "/logout-complete", "/users/new", "/user").permitAll()
                 .anyRequest().authenticated()
                 // ログアウト処理
@@ -58,16 +58,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/login").defaultSuccessUrl("/topics").failureUrl("/login-failure")
                 .permitAll();
         // @formatter:on
-    }
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(authenticationProvider);
+	}
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 }
