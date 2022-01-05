@@ -43,6 +43,8 @@ import com.example.pictgram.entity.UserInf;
 import com.example.pictgram.form.TopicForm;
 import com.example.pictgram.form.UserForm;
 import com.example.pictgram.repository.TopicRepository;
+import com.example.pictgram.entity.Comment;
+import com.example.pictgram.form.CommentForm;
 
 @Controller
 public class TopicsController {
@@ -84,6 +86,7 @@ public class TopicsController {
 		modelMapper.getConfiguration().setAmbiguityIgnored(true);
 		modelMapper.typeMap(Topic.class, TopicForm.class).addMappings(mapper -> mapper.skip(TopicForm::setUser));
 		modelMapper.typeMap(Topic.class, TopicForm.class).addMappings(mapper -> mapper.skip(TopicForm::setFavorites));
+		modelMapper.typeMap(Topic.class, TopicForm.class).addMappings(mapper -> mapper.skip(TopicForm::setComments));
 		modelMapper.typeMap(Favorite.class, FavoriteForm.class)
 				.addMappings(mapper -> mapper.skip(FavoriteForm::setTopic));
 		boolean isImageLocal = false;
@@ -122,6 +125,14 @@ public class TopicsController {
 			}
 		}
 		form.setFavorites(favorites);
+
+		List<CommentForm> comments = new ArrayList<CommentForm>();
+
+		for (Comment commentEntity : entity.getComments()) {
+			CommentForm comment = modelMapper.map(commentEntity, CommentForm.class);
+			comments.add(comment);
+		}
+		form.setComments(comments);
 
 		return form;
 	}
