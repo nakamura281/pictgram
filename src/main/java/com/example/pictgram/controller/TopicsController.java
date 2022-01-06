@@ -1,4 +1,5 @@
 package com.example.pictgram.controller;
+import java.io.Serializable;
 
 import java.util.Locale;
 import com.example.pictgram.entity.Favorite;
@@ -47,7 +48,9 @@ import com.example.pictgram.entity.Comment;
 import com.example.pictgram.form.CommentForm;
 
 @Controller
-public class TopicsController {
+public class TopicsController implements Serializable  {
+	
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -201,7 +204,7 @@ public class TopicsController {
 		repository.saveAndFlush(entity);
 
 		if (!isImageLocal) {
-			String url = saveImageLocal(image, entity).getPath();
+			String url = saveImageS3(image, entity);
 			entity.setPath(url);
 			repository.saveAndFlush(entity);
 		}
