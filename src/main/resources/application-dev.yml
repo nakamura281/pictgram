@@ -13,4 +13,4 @@ spring:
       
       
 image:
-  local: true      
+  local: false     
