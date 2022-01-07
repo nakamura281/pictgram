@@ -1,6 +1,6 @@
 package com.example.pictgram.controller;
-import java.io.Serializable;
 
+import java.io.Serializable;
 import java.util.Locale;
 import com.example.pictgram.entity.Favorite;
 import com.example.pictgram.form.FavoriteForm;
