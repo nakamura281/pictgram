@@ -6,7 +6,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import javax.mail.internet.MimeMessage;
-import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,9 +15,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
 @Service
-public class SendMailService implements Serializable {
+public class SendMailService  {
 
-	private static final long serialVersionUID = 1L;
 	@Autowired
 	private JavaMailSender javaMailSender;
 
