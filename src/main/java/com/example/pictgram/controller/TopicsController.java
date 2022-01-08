@@ -1,5 +1,7 @@
 package com.example.pictgram.controller;
 
+import org.thymeleaf.context.Context;
+import com.example.pictgram.service.SendMailService;
 import java.io.Serializable;
 import java.util.Locale;
 import com.example.pictgram.entity.Favorite;
@@ -48,8 +50,8 @@ import com.example.pictgram.entity.Comment;
 import com.example.pictgram.form.CommentForm;
 
 @Controller
-public class TopicsController implements Serializable  {
-	
+public class TopicsController implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
@@ -77,6 +79,9 @@ public class TopicsController implements Serializable  {
 
 	@Autowired
 	S3Wrapper s3;
+
+	@Autowired
+	private SendMailService sendMailService;
 
 	@GetMapping(path = "/topics")
 	public String index(Principal principal, Model model) throws IOException {
@@ -212,7 +217,14 @@ public class TopicsController implements Serializable  {
 		redirAttrs.addFlashAttribute("hasMessage", true);
 		redirAttrs.addFlashAttribute("class", "alert-info");
 		redirAttrs.addFlashAttribute("message",
+
 				messageSource.getMessage("topics.create.flash.2", new String[] {}, locale));
+
+		Context context = new Context();
+		context.setVariable("title", "【Pictgram】新規投稿");
+		context.setVariable("name", user.getUsername());
+		context.setVariable("description", entity.getDescription());
+		sendMailService.sendMail(context);
 
 		return "redirect:/topics";
 	}
@@ -233,16 +245,15 @@ public class TopicsController implements Serializable  {
 		return destFile;
 	}
 
-   private String saveImageS3(MultipartFile image, Topic entity)
-   throws IOException {
-       String path = "uploads/topic/image/" + entity.getId() + "/" + image.getOriginalFilename();
-       s3.upload(image.getInputStream(), path);
-       String fileName = image.getOriginalFilename();
-       File destFile = File.createTempFile("s3_", ".tmp");
-       image.transferTo(destFile);
+	private String saveImageS3(MultipartFile image, Topic entity) throws IOException {
+		String path = "uploads/topic/image/" + entity.getId() + "/" + image.getOriginalFilename();
+		s3.upload(image.getInputStream(), path);
+		String fileName = image.getOriginalFilename();
+		File destFile = File.createTempFile("s3_", ".tmp");
+		image.transferTo(destFile);
 
-       String url = "https://" + awsBucket + ".s3-" + awsDefaultRegion + ".amazonaws.com/" + path;
+		String url = "https://" + awsBucket + ".s3-" + awsDefaultRegion + ".amazonaws.com/" + path;
 
-       return url;
-   }
+		return url;
+	}
 }
