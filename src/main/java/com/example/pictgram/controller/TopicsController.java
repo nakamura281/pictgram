@@ -57,7 +57,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import org.springframework.http.ResponseEntity;
 import com.example.pictgram.entity.Topic;
 import com.example.pictgram.entity.UserInf;
 import com.example.pictgram.form.TopicForm;
@@ -112,6 +112,11 @@ public class TopicsController implements Serializable {
 			list.add(form);
 		}
 		model.addAttribute("list", list);
+
+		model.addAttribute("hasFooter", true);
+		ResponseEntity<byte[]> entity = s3.download("tags");
+		String body = new String(entity.getBody());
+		model.addAttribute("tags", body.split(System.getProperty("line.separator")));
 
 		return "topics/index";
 	}
