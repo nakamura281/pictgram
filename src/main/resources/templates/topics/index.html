@@ -20,7 +20,7 @@
 				/*[# th:each="topic : ${list}"]*/
 				 /*[# th:if="${topic.latitude != null and topic.longitude != null}"]*/
 				   new google.maps.Map(document.getElementById("map[[${topic.id}]]"), {
-				       center: { lat: [[${topic.latitude}]], lng: [[${topic.longitude}]] },
+				       center: { lat [[${topic.latitude}]], lng: [[${topic.longitude}]] },
 				       zoom: 16,
 				   });
 				 /*[/]*/
