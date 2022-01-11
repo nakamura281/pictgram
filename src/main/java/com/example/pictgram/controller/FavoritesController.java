@@ -54,6 +54,11 @@ public class FavoritesController {
 		}
 		model.addAttribute("list", list);
 
+		model.addAttribute("hasFooter", true);
+		ResponseEntity<byte[]> entity = s3.download("tags");
+		String body = new String(entity.getBody());
+		model.addAttribute("tags", body.split(System.getProperty("line.separator")));
+
 		return "topics/index";
 	}
 
